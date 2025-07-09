@@ -1,0 +1,214 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>MoEvents</title>
+
+<meta charset="utf-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<style>
+
+html, body {
+
+height: 100%;
+
+margin: 0;
+
+padding: 0;
+
+overflow: hidden;
+
+}
+
+#map {
+
+height: 100%;
+
+width: 100%;
+
+}
+
+.map-buttons-container {
+
+position: absolute;
+
+top: 10px;
+
+right: 10px;
+
+z-index: 1000;
+
+display: flex;
+
+gap: 5px;
+
+}
+
+/* Stili per i bottoni (se sono <button>) o per i link che sembrano bottoni */
+
+.map-button, .map-link-button {
+
+padding: 8px 12px;
+
+background-color: #007bff;
+
+color: white;
+
+border: none;
+
+border-radius: 5px;
+
+cursor: pointer;
+
+font-family: sans-serif;
+
+font-size: 14px;
+
+box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+transition: background-color 0.3s ease;
+
+text-decoration: none; /* Rimuovi sottolineatura dai link */
+
+display: inline-block; /* Assicura che i link possano avere padding */
+
+}
+
+.map-button:hover, .map-link-button:hover {
+
+background-color: #0056b3;
+
+}
+
+        .user-status-container {
+      position: absolute;
+      top: 10px;
+      left: 80px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: sans-serif;
+      font-size: 13px;
+      color: #333;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="map"></div>
+
+  <div class="user-status-container">
+    {% if user.is_authenticated %}
+      👤 Connesso come <strong>{{ user.username }}</strong>
+    {% else %}
+      🚫 Non sei connesso
+    {% endif %}
+  </div>
+
+<div class="map-buttons-container">
+  {% if user.is_authenticated %}
+    <!-- Utente autenticato: Lista e Logout -->
+    <a href="{% url 'lista' %}" class="map-link-button" id="button1">Lista Futura</a>
+
+    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="map-button" id="button2">Logout</button>
+    </form>
+  {% else %}
+    <!-- Utente anonimo: Login e Register -->
+    <a href="{% url 'login' %}" class="map-link-button" id="button1">Login</a>
+    <a href="{% url 'register' %}" class="map-link-button" id="button2">Registrati</a>
+  {% endif %}
+</div>
+
+
+
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+const map = L.map('map').setView([44.6471, 10.9252], 10);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+// Carica i confini
+fetch("{% static 'mappa/modena.geojson' %}")
+  .then(response => response.json())
+  .then(data => {
+    const geoLayer = L.geoJSON(data, {
+      style: {
+        color: 'blue',
+        weight: 2,
+        fillOpacity: 0.1
+      }
+    }).addTo(map);
+
+    map.fitBounds(geoLayer.getBounds());
+  });
+
+// Marker degli eventi
+const eventi = [
+  {% for evento in eventi %}
+    {
+      titolo: "{{ evento.titolo|escapejs }}",
+      descrizione: "{{ evento.descrizione|escapejs }}",
+      luogo: "{{ evento.luogo|escapejs }}",
+      data: "{{ evento.data }}",
+      ora: "{{ evento.ora }}",
+      lat: {{ evento.latitudine }},
+      lng: {{ evento.longitudine }}
+    },
+  {% endfor %}
+];
+
+eventi.forEach(e => {
+  if (e.lat && e.lng) {
+    L.marker([e.lat, e.lng]).addTo(map)
+      .bindPopup(`<strong>${e.titolo}</strong><br>${e.data} ${e.ora}<br>${e.luogo}<br>${e.descrizione}`);
+  }
+});
+
+{% if user.is_staff %}
+// ➡️ Click destro per creare nuovo evento
+map.on('contextmenu', function(e) {
+  const lat = e.latlng.lat.toFixed(6);
+  const lng = e.latlng.lng.toFixed(6);
+
+  const popupContent = `
+    <strong>Nuovo evento qui?</strong><br>
+    Lat: ${lat}<br>
+    Lng: ${lng}<br>
+    <a href="/admin/mappe/evento/add/?latitudine=${lat}&longitudine=${lng}" target="_blank">Crea nuovo evento</a>
+  `;
+
+  L.popup()
+    .setLatLng(e.latlng)
+    .setContent(popupContent)
+    .openOn(map);
+});
+{% endif %}
+</script>
+
+
+
+</body>
+
+</html>

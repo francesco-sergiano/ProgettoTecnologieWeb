@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4; /* Light gray background */
+            margin: 0;
+        }
+
+        .registration-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 450px; /* Slightly wider for more form fields */
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 28px;
+            font-weight: normal;
+        }
+
+        /* Styling for Django's form.as_p output */
+        .registration-container p {
+            margin-bottom: 20px;
+            text-align: left; /* Align labels to the left */
+        }
+
+        .registration-container label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .registration-container input[type="text"],
+        .registration-container input[type="email"],
+        .registration-container input[type="password"] {
+            width: calc(100% - 20px); /* Adjust for padding */
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            transition: border-color 0.3s ease;
+        }
+
+        .registration-container input:focus {
+            border-color: #007bff; /* Highlight on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        button[type="submit"] {
+            background-color: #28a745; /* Green for registration */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <h2>Registrazione</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }} {# This will render your form fields dynamically #}
+            <button type="submit">Registrati</button>
+        </form>
+    </div>
+</body>
+</html>

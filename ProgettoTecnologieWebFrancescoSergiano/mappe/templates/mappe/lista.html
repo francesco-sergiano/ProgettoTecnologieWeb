@@ -115,6 +115,20 @@
 </head>
 <body>
     <h1>Prossimi Eventi nella Provincia di Modena</h1>
+<form method="get" style="max-width:800px;margin:0 auto 20px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+    <input type="text" name="q" placeholder="Cerca per titolo…" value="{{ query }}" style="flex:2;min-width:150px;padding:5px;">
+
+    <select name="tipo" style="flex:1;min-width:120px;padding:5px;">
+        <option value="">Tutti i tipi</option>
+        <option value="FESTA" {% if tipo == 'FESTA' %}selected{% endif %}>Festa</option>
+        <option value="EVENTO" {% if tipo == 'EVENTO' %}selected{% endif %}>Evento</option>
+        <option value="ALTRO" {% if tipo == 'ALTRO' %}selected{% endif %}>Altro</option>
+    </select>
+
+    <input type="date" name="data" value="{{ data }}" style="flex:1;min-width:150px;padding:5px;">
+
+    <button type="submit" style="flex:0;background:#007bff;color:#fff;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Filtra</button>
+</form>
 
     <div class="event-list">
         {% if eventi %}
@@ -132,19 +146,19 @@
                     <img src="{{ evento.immagine.url }}" alt="Immagine di {{ evento.titolo }}" class="event-image">
                     {% endif %}
 
-                    {% if user.is_authenticated and user.is_staff %}
 <div class="delete-form">
     <a href="{% url 'dettaglio_evento' evento.id %}" class="edit-button" style="background-color:#28a745;">Visualizza</a>
 
-    <a href="{% url 'modifica_evento' evento.id %}" class="edit-button">Modifica</a>
+    {% if user.is_authenticated and user.is_staff %}
+        <a href="{% url 'modifica_evento' evento.id %}" class="edit-button">Modifica</a>
 
-    <form style="display:inline;" action="{% url 'elimina_evento' evento.id %}" method="post" onsubmit="return confermaEliminazione();">
-        {% csrf_token %}
-        <button type="submit" class="delete-button">Elimina</button>
-    </form>
+        <form style="display:inline;" action="{% url 'elimina_evento' evento.id %}" method="post" onsubmit="return confermaEliminazione();">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Elimina</button>
+        </form>
+    {% endif %}
 </div>
 
-                    {% endif %}
                 </div>
             {% endfor %}
         {% else %}

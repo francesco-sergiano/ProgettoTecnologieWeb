@@ -79,3 +79,35 @@ def modifica_evento(request, evento_id):
 def dettaglio_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
     return render(request, 'mappe/dettaglio_evento.html', {'evento': evento})
+
+
+def lista_view(request):
+    eventi = Evento.objects.all()
+
+    query = request.GET.get("q", "").strip()
+    tipo = request.GET.get("tipo", "")
+    data = request.GET.get("data", "")
+
+    # sanifica query
+    import re
+    query = request.GET.get("q", "").strip()
+
+    if len(query) > 100:
+        query = query[:100]  # evita input lunghissimi
+
+    if query:
+        eventi = eventi.filter(titolo__icontains=query)
+
+    if tipo:
+        eventi = eventi.filter(tipo=tipo)
+
+    if data:
+        eventi = eventi.filter(data=data)
+
+    return render(request, "mappe/lista.html", {
+        "eventi": eventi,
+        "query": query,
+        "tipo": tipo,
+        "data": data,
+    })
+

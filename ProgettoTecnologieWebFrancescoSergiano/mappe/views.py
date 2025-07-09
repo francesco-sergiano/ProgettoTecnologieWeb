@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required # Importa questo
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from .forms import RegisterForm
 from .models import Evento
+from .forms import EventoForm
 
 def mappa_modena(request):
     eventi = Evento.objects.all()
@@ -56,3 +57,25 @@ def elimina_evento(request, evento_id):
         evento = get_object_or_404(Evento, id=evento_id)
         evento.delete()
     return redirect('lista')
+
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def modifica_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+
+    if request.method == 'POST':
+        form = EventoForm(request.POST, request.FILES, instance=evento)
+        if form.is_valid():
+            form.save()
+            return redirect('lista')
+    else:
+        form = EventoForm(instance=evento)
+
+    return render(request, 'mappe/modifica_evento.html', {'form': form, 'evento': evento})
+
+
+def dettaglio_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+    return render(request, 'mappe/dettaglio_evento.html', {'evento': evento})

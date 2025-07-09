@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Evento: {{ evento.titolo }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variabili CSS per facilitare la gestione dei colori */
+        :root {
+            --primary-blue: #3498db;
+            --dark-blue: #2c3e50;
+            --light-grey: #eef2f7;
+            --medium-grey: #6c757d;
+            --green-success: #28a745;
+            --shadow-light: rgba(0,0,0,0.08);
+            --shadow-medium: rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Un font moderno e pulito */
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-grey); /* Sfondo chiaro e moderno */
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra il contenuto orizzontalmente */
+            min-height: 100vh; /* Assicura che il body occupi l'intera altezza della viewport */
+        }
+
+        h1 {
+            color: var(--dark-blue); /* Colore più scuro e professionale */
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 2.8em; /* Titolo più grande e impattante */
+            font-weight: 700; /* Più spesso */
+            letter-spacing: -0.8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-blue); /* Sottolineatura sottile */
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 12px; /* Bordi più arrotondati */
+            box-shadow: 0 8px 25px var(--shadow-light); /* Ombra più pronunciata e moderna */
+            padding: 40px;
+            max-width: 650px; /* Larghezza leggermente aumentata */
+            width: 100%; /* Si adatta alla larghezza disponibile */
+            margin-bottom: 30px; /* Spazio sotto il form */
+            border-top: 6px solid var(--primary-blue); /* Bordo superiore accentuato */
+            box-sizing: border-box; /* Include padding nel calcolo della larghezza */
+        }
+
+        /* Stili per i Campi del Form (generati da {{ form.as_p }}) */
+        .form-container p {
+            margin-bottom: 20px; /* Più spazio tra i campi */
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444; /* Colore più scuro per le etichette */
+            font-size: 1em; /* Dimensione leggermente più grande */
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="date"],
+        .form-container input[type="time"],
+        .form-container input[type="number"],
+        .form-container textarea,
+        .form-container select {
+            width: 100%; /* Larghezza piena */
+            padding: 14px; /* Più padding per una migliore cliccabilità/tappabilità */
+            border: 1px solid #dcdcdc; /* Bordo più chiaro */
+            border-radius: 8px; /* Bordi arrotondati per i campi */
+            font-size: 1.05em; /* Testo leggermente più grande */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        .form-container input[type="file"] {
+            width: 100%;
+            padding: 10px 0; /* Meno padding per l'input file, che ha già uno stile nativo */
+            border: none; /* Rimuovi bordo nativo */
+            font-size: 1em;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        .form-container input[type="text"]:focus,
+        .form-container input[type="date"]:focus,
+        .form-container input[type="time"]:focus,
+        .form-container input[type="number"]:focus,
+        .form-container input[type="file"]:focus,
+        .form-container textarea:focus,
+        .form-container select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25); /* Anello di focus più moderno */
+            outline: none;
+        }
+
+        .form-container textarea {
+            resize: vertical;
+            min-height: 120px; /* Altezza minima maggiore per la descrizione */
+        }
+
+        /* Stile specifico per il testo "Latitudine in gradi decimali" e "Longitudine in gradi decimali" */
+        .form-container p strong {
+            display: block; /* Forse le coordinate sono avvolte in un p con strong, assicuriamo che sia un blocco */
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        /* Immagine Attuale */
+        .current-image-section {
+            margin-top: 30px;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 20px;
+            background-color: #fcfcfc; /* Sfondo molto leggero */
+            border-radius: 10px;
+            border: 1px solid #eee; /* Bordo sottile */
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05); /* Ombra interna leggera */
+        }
+
+        .current-image-section p {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 1em;
+        }
+
+        .current-image-section img {
+            max-width: 300px; /* Dimensione maggiore per l'immagine */
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow-light); /* Ombra più visibile */
+            border: 2px solid #fff; /* Bordo bianco intorno all'immagine */
+            outline: 1px solid #ddd; /* Outline sottile */
+        }
+
+        /* Pulsanti */
+        .button-group {
+            display: flex;
+            justify-content: flex-end; /* Allinea i pulsanti a destra */
+            margin-top: 35px;
+            gap: 20px; /* Spazio tra i pulsanti */
+        }
+
+        .action-button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px; /* Bordi più arrotondati per i pulsanti */
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex; /* Usa flexbox per centrare il testo e l'icona se ci fossero */
+            align-items: center;
+            justify-content: center;
+            min-width: 150px; /* Larghezza minima per i pulsanti */
+        }
+
+        .save-button {
+            background-color: var(--primary-blue); /* Blu primario per Salva */
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); /* Ombra colorata */
+        }
+
+        .save-button:hover {
+            background-color: #2980b9; /* Blu leggermente più scuro all'hover */
+            transform: translateY(-3px); /* Effetto "alza" */
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .back-button {
+            background-color: var(--medium-grey); /* Grigio per Indietro */
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+        }
+
+        /* Media Queries per la Responsività */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+                margin-bottom: 25px;
+                padding-bottom: 8px;
+            }
+            .form-container {
+                padding: 25px;
+                border-radius: 8px;
+            }
+            .form-container label {
+                font-size: 0.9em;
+            }
+            .form-container input[type="text"],
+            .form-container input[type="date"],
+            .form-container input[type="time"],
+            .form-container input[type="number"],
+            .form-container textarea,
+            .form-container select {
+                padding: 12px;
+                font-size: 0.95em;
+            }
+            .current-image-section {
+                padding: 15px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            .current-image-section img {
+                max-width: 200px;
+            }
+            .button-group {
+                flex-direction: column; /* Impila i pulsanti su schermi piccoli */
+                gap: 15px;
+                justify-content: center; /* Centra i pulsanti impilati */
+            }
+            .action-button {
+                width: 100%; /* Larghezza piena per i pulsanti */
+                min-width: unset; /* Rimuovi la larghezza minima */
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Modifica Evento: {{ evento.titolo }}</h1>
+
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            {% if evento.immagine %}
+                <div class="current-image-section">
+                    <p>Immagine attuale:</p>
+                    <img src="{{ evento.immagine.url }}" alt="Immagine attuale di {{ evento.titolo }}">
+                </div>
+            {% endif %}
+
+            <div class="button-group">
+                <button type="submit" class="action-button save-button">Salva Modifiche</button>
+                <a href="{% url 'lista' %}" class="action-button back-button">Torna alla lista</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

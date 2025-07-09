@@ -123,7 +123,7 @@ background-color: #0056b3;
 <div class="map-buttons-container">
   {% if user.is_authenticated %}
     <!-- Utente autenticato: Lista e Logout -->
-    <a href="{% url 'lista' %}" class="map-link-button" id="button1">Lista Futura</a>
+    <a href="{% url 'lista' %}" class="map-link-button" id="button1">Lista eventi</a>
 
     <form action="{% url 'logout' %}" method="post" style="display:inline;">
       {% csrf_token %}
@@ -182,7 +182,7 @@ const eventi = [
 eventi.forEach(e => {
   if (e.lat && e.lng) {
     L.marker([e.lat, e.lng]).addTo(map)
-      .bindPopup(`<strong>${e.titolo}</strong><br>${e.data} ${e.ora}<br>${e.luogo}<br>${e.descrizione}`);
+      .bindPopup(`<strong>${e.titolo}</strong><br>${e.data} ${e.ora}<br>${e.luogo}`);
   }
 });
 

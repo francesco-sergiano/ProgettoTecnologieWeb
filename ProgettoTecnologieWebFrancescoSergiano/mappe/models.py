@@ -18,6 +18,8 @@ class Evento(models.Model):
     latitudine = models.FloatField(default=0.0, help_text="Latitudine in gradi decimali")
     longitudine = models.FloatField(default=0.0, help_text="Longitudine in gradi decimali")
 
+    immagine = models.ImageField(upload_to='eventi/', null=True, blank=True, help_text="Immagine dell'evento")
+
     def __str__(self):
         return f"{self.titolo} ({self.tipo}) - {self.data}"
 

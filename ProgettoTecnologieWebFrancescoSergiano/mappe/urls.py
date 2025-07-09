@@ -1,6 +1,8 @@
 # urls.py della tua app
 from django.urls import path
 from . import views # Importa tutto da views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Mappa come pagina di default (accessibile a tutti)
@@ -11,4 +13,6 @@ urlpatterns = [
     path('mappa/', views.mappa_modena, name='mappa_modena'), # Può rimanere o essere eliminato se la home è sufficiente
     path('lista/', views.lista_view, name='lista'),
     path('elimina/<int:evento_id>/', views.elimina_evento, name='elimina_evento'),
-]
+    path('modifica/<int:evento_id>/', views.modifica_evento, name='modifica_evento'),
+    path('evento/<int:evento_id>/', views.dettaglio_evento, name='dettaglio_evento'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

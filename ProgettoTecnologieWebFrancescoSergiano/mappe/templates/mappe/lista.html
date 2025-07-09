@@ -83,6 +83,29 @@
             background-color: #007bff;
             color: white;
         }
+
+        .edit-button {
+    background-color: #ffc107;
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+.edit-button:hover {
+    background-color: #e0a800;
+}
+
+        .event-image {
+    width: 100%;
+    max-height: 200px; /* o quello che preferisci */
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+
     </style>
     <script>
     function confermaEliminazione() {
@@ -105,12 +128,22 @@
                         <p><strong>Coordinate:</strong> {{ evento.coordinate }}</p>
                     {% endif %}
                     <p class="description">{{ evento.descrizione }}</p>
+                    {% if evento.immagine %}
+                    <img src="{{ evento.immagine.url }}" alt="Immagine di {{ evento.titolo }}" class="event-image">
+                    {% endif %}
 
                     {% if user.is_authenticated and user.is_staff %}
-                    <form class="delete-form" action="{% url 'elimina_evento' evento.id %}" method="post" onsubmit="return confermaEliminazione();">
-                        {% csrf_token %}
-                        <button type="submit" class="delete-button">Elimina</button>
-                    </form>
+<div class="delete-form">
+    <a href="{% url 'dettaglio_evento' evento.id %}" class="edit-button" style="background-color:#28a745;">Visualizza</a>
+
+    <a href="{% url 'modifica_evento' evento.id %}" class="edit-button">Modifica</a>
+
+    <form style="display:inline;" action="{% url 'elimina_evento' evento.id %}" method="post" onsubmit="return confermaEliminazione();">
+        {% csrf_token %}
+        <button type="submit" class="delete-button">Elimina</button>
+    </form>
+</div>
+
                     {% endif %}
                 </div>
             {% endfor %}

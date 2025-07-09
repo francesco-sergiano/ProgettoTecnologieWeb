@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ evento.titolo }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variabili CSS per coerenza con le altre pagine */
+        :root {
+            --primary-blue: #3498db;
+            --dark-blue: #2c3e50;
+            --light-grey-bg: #eef2f7;
+            --medium-grey-text: #666;
+            --light-grey-border: #dcdcdc;
+            --shadow-light: rgba(0,0,0,0.08);
+            --shadow-medium: rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-grey-bg);
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-blue);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .event-detail-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-light);
+            padding: 40px;
+            max-width: 700px; /* Larghezza leggermente maggiore per i dettagli */
+            width: 100%;
+            margin-bottom: 30px;
+            border-top: 6px solid var(--primary-blue);
+            box-sizing: border-box;
+            display: flex; /* Utilizzo flexbox per il layout interno */
+            flex-direction: column; /* Elementi impilati verticalmente */
+            align-items: center; /* Centra gli elementi all'interno del container */
+        }
+
+        .event-image-wrapper {
+            margin-bottom: 30px; /* Spazio sotto l'immagine */
+            text-align: center;
+        }
+
+        .event-image-wrapper img {
+            max-width: 100%; /* Immagine responsiva */
+            height: auto;
+            border-radius: 10px; /* Bordi arrotondati per l'immagine */
+            box-shadow: 0 5px 15px var(--shadow-light); /* Ombra per l'immagine */
+            border: 3px solid #fff; /* Bordo bianco intorno all'immagine */
+            outline: 1px solid var(--light-grey-border); /* Outline sottile */
+        }
+
+        .event-info {
+            width: 100%; /* Le informazioni occupano tutta la larghezza disponibile */
+            padding-left: 20px; /* Piccolo padding per i dettagli */
+            padding-right: 20px;
+        }
+
+        .event-info p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            color: #444; /* Colore testo leggermente più scuro */
+            display: flex; /* Per allineare strong e testo */
+            gap: 10px; /* Spazio tra strong e il valore */
+            align-items: baseline; /* Allinea il testo sulla stessa linea */
+        }
+
+        .event-info p strong {
+            color: var(--dark-blue); /* Colore più scuro per le etichette */
+            font-weight: 600;
+            min-width: 100px; /* Larghezza minima per le etichette per allineamento */
+        }
+
+        .event-info p.description {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--light-grey-border); /* Linea divisoria per la descrizione */
+            line-height: 1.8; /* Maggiore spaziatura per il testo della descrizione */
+            color: var(--medium-grey-text);
+            font-size: 1em;
+            flex-direction: column; /* La descrizione occupa la sua riga */
+            align-items: flex-start;
+        }
+        .event-info p.description strong {
+            margin-bottom: 8px; /* Spazio tra l'etichetta "Descrizione" e il testo */
+        }
+
+
+        .back-link-button {
+            display: inline-flex; /* Usa flexbox per centrare il testo */
+            align-items: center;
+            justify-content: center;
+            padding: 14px 30px;
+            margin-top: 30px; /* Spazio sopra il pulsante */
+            background-color: var(--medium-grey);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
+            min-width: 200px;
+        }
+
+        .back-link-button:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+        }
+
+        /* Media Queries per la Responsività */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+                margin-bottom: 25px;
+                padding-bottom: 8px;
+            }
+            .event-detail-container {
+                padding: 25px;
+                border-radius: 8px;
+            }
+            .event-info p {
+                font-size: 1em;
+                flex-direction: column; /* Impila etichetta e valore su mobile */
+                gap: 5px;
+                align-items: flex-start;
+            }
+            .event-info p strong {
+                min-width: unset; /* Rimuovi larghezza minima su mobile */
+            }
+            .event-info p.description {
+                font-size: 0.95em;
+            }
+            .back-link-button {
+                width: 100%;
+                min-width: unset;
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Dettagli Evento</h1>
+
+    <div class="event-detail-container">
+        {% if evento.immagine %}
+            <div class="event-image-wrapper">
+                <img src="{{ evento.immagine.url }}" alt="{{ evento.titolo }}">
+            </div>
+        {% endif %}
+
+        <div class="event-info">
+            <h2>{{ evento.titolo }}</h2> <p><strong>Tipo:</strong> {{ evento.get_tipo_display }}</p>
+            <p><strong>Dove:</strong> {{ evento.luogo }}</p>
+            <p><strong>Quando:</strong> {{ evento.data|date:"d M Y" }} alle {{ evento.ora|time:"H:i" }}</p>
+            {% if evento.latitudine and evento.longitudine %}
+                <p><strong>Coordinate:</strong> {{ evento.latitudine }}, {{ evento.longitudine }}</p>
+            {% endif %}
+            <p class="description"><strong>Descrizione:</strong> {{ evento.descrizione }}</p>
+        </div>
+    </div>
+
+    <a href="{% url 'lista' %}" class="back-link-button">Torna alla lista</a>
+</body>
+</html>

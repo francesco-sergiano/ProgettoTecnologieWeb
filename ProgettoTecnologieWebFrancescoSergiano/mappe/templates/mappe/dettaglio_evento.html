@@ -187,6 +187,24 @@
             <p class="description"><strong>Descrizione:</strong> {{ evento.descrizione }}</p>
         </div>
     </div>
+<div style="margin-top:30px; text-align:center;">
+    <p><strong>Condividi questo evento:</strong></p>
+
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+       target="_blank"
+       style="margin:5px; text-decoration:none; color:white; background:#3b5998; padding:8px 12px; border-radius:4px; display:inline-block;">Facebook</a>
+
+    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ evento.titolo }}"
+       target="_blank"
+       style="margin:5px; text-decoration:none; color:white; background:#1da1f2; padding:8px 12px; border-radius:4px; display:inline-block;">Twitter</a>
+
+    <a href="https://wa.me/?text={{ evento.titolo }}%20{{ request.build_absolute_uri }}"
+       target="_blank"
+       style="margin:5px; text-decoration:none; color:white; background:#25d366; padding:8px 12px; border-radius:4px; display:inline-block;">WhatsApp</a>
+
+    <a href="mailto:?subject={{ evento.titolo }}&body=Guarda questo evento: {{ request.build_absolute_uri }}"
+       style="margin:5px; text-decoration:none; color:white; background:#6c757d; padding:8px 12px; border-radius:4px; display:inline-block;">Email</a>
+</div>
 
     <a href="{% url 'lista' %}" class="back-link-button">Torna alla lista</a>
 </body>

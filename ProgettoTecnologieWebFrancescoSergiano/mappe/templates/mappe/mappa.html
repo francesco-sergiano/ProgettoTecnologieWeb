@@ -54,6 +54,22 @@ gap: 5px;
 
 }
 
+.map-search-container {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.map-search-container input {
+    padding: 6px 10px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
 /* Stili per i bottoni (se sono <button>) o per i link che sembrano bottoni */
 
 .map-button, .map-link-button {
@@ -111,7 +127,9 @@ background-color: #0056b3;
 <body>
 
 <div id="map"></div>
-
+<div class="map-search-container">
+    <input type="text" id="search" placeholder="Cerca evento..." oninput="searchEvento()">
+</div>
   <div class="user-status-container">
     {% if user.is_authenticated %}
       👤 Connesso come <strong>{{ user.username }}</strong>
@@ -164,7 +182,6 @@ fetch("{% static 'mappa/modena.geojson' %}")
     map.fitBounds(geoLayer.getBounds());
   });
 
-// Marker degli eventi
 const eventi = [
   {% for evento in eventi %}
     {
@@ -174,17 +191,30 @@ const eventi = [
       data: "{{ evento.data }}",
       ora: "{{ evento.ora }}",
       lat: {{ evento.latitudine }},
-      lng: {{ evento.longitudine }}
+      lng: {{ evento.longitudine }},
+      marker: null
     },
   {% endfor %}
 ];
 
+// crea i marker e li associa
 eventi.forEach(e => {
   if (e.lat && e.lng) {
-    L.marker([e.lat, e.lng]).addTo(map)
+    e.marker = L.marker([e.lat, e.lng]).addTo(map)
       .bindPopup(`<strong>${e.titolo}</strong><br>${e.data} ${e.ora}<br>${e.luogo}`);
   }
 });
+
+function searchEvento() {
+  const query = document.getElementById('search').value.trim().toLowerCase();
+  if (!query) return;
+
+  const found = eventi.find(e => e.titolo.toLowerCase().includes(query));
+  if (found && found.marker) {
+    map.setView(found.marker.getLatLng(), 14);
+    found.marker.openPopup();
+  }
+}
 
 {% if user.is_staff %}
 // ➡️ Click destro per creare nuovo evento

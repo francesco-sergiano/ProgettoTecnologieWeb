@@ -137,11 +137,11 @@
                     <h2>{{ evento.titolo }}</h2>
                     <p><strong>Tipo:</strong> {{ evento.get_tipo_display }}</p>
                     <p><strong>Dove:</strong> {{ evento.luogo }}</p>
-                    <p><strong>Quando:</strong> {{ evento.data|date:"d M Y" }} alle {{ evento.ora|time:"H:i" }}</p>
+                    <p><strong>Quando:</strong> {{ evento.data|date:"l d F Y" }}</p>
+                    <p><strong>Orario di inizio:</strong> {{ evento.ora|time:"H:i" }}</p>
                     {% if evento.coordinate %}
                         <p><strong>Coordinate:</strong> {{ evento.coordinate }}</p>
                     {% endif %}
-                    <p class="description">{{ evento.descrizione }}</p>
                     {% if evento.immagine %}
                     <img src="{{ evento.immagine.url }}" alt="Immagine di {{ evento.titolo }}" class="event-image">
                     {% endif %}

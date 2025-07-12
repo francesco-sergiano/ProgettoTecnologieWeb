@@ -1,164 +1,133 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
 <title>MoEvents</title>
-
 <meta charset="utf-8" />
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-
 html, body {
-
 height: 100%;
-
 margin: 0;
-
 padding: 0;
-
 overflow: hidden;
-
 }
-
 #map {
-
 height: 100%;
-
 width: 100%;
-
 }
-
 .map-buttons-container {
-
 position: absolute;
-
 top: 10px;
-
 right: 10px;
-
 z-index: 1000;
-
 display: flex;
-
 gap: 5px;
-
 }
-
 .map-search-container {
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
+    display: flex;
+    align-items: center;
+    border: 2px solid white;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
-
 .map-search-container input {
     padding: 6px 10px;
     width: 250px;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 4px;
     font-size: 14px;
+    outline: none;
 }
-
-/* Stili per i bottoni (se sono <button>) o per i link che sembrano bottoni */
-
+.map-search-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.map-search-container button:hover {
+    background-color: #0056b3;
+}
 .map-button, .map-link-button {
-
 padding: 8px 12px;
-
 background-color: #007bff;
-
 color: white;
-
 border: none;
-
 border-radius: 5px;
-
 cursor: pointer;
-
 font-family: sans-serif;
-
 font-size: 14px;
-
 box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-
 transition: background-color 0.3s ease;
-
-text-decoration: none; /* Rimuovi sottolineatura dai link */
-
-display: inline-block; /* Assicura che i link possano avere padding */
-
+text-decoration: none;
+display: inline-block;
 }
-
 .map-button:hover, .map-link-button:hover {
-
 background-color: #0056b3;
-
 }
-
-        .user-status-container {
-      position: absolute;
-      top: 10px;
-      left: 80px;
-      z-index: 1000;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 6px 10px;
-      border-radius: 4px;
-      font-family: sans-serif;
-      font-size: 13px;
-      color: #333;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-
+.user-status-container {
+position: absolute;
+top: 10px;
+left: 80px;
+z-index: 1000;
+background: rgba(255, 255, 255, 0.8);
+padding: 6px 10px;
+border-radius: 4px;
+font-family: sans-serif;
+font-size: 13px;
+color: #333;
+box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
 </style>
-
 </head>
-
 <body>
 
 <div id="map"></div>
+
 <div class="map-search-container">
-    <input type="text" id="search" placeholder="Cerca evento..." oninput="searchEvento()">
+    <input type="text" id="search" placeholder="Cerca evento..." onkeyup="if(event.key === 'Enter') searchEvento()">
+    <button onclick="searchEvento()"><i class="fas fa-search"></i></button>
 </div>
-  <div class="user-status-container">
+
+<div class="user-status-container">
     {% if user.is_authenticated %}
       👤 Connesso come <strong>{{ user.username }}</strong>
     {% else %}
       🚫 Non sei connesso
     {% endif %}
-  </div>
+</div>
 
 <div class="map-buttons-container">
   {% if user.is_authenticated %}
-    <!-- Utente autenticato: Lista e Logout -->
-    <a href="{% url 'lista' %}" class="map-link-button" id="button1">Lista eventi</a>
-
+    <a href="{% url 'lista' %}" class="map-link-button">Lista eventi</a>
     <form action="{% url 'logout' %}" method="post" style="display:inline;">
       {% csrf_token %}
-      <button type="submit" class="map-button" id="button2">Logout</button>
+      <button type="submit" class="map-button">Logout</button>
     </form>
   {% else %}
-    <!-- Utente anonimo: Login e Register -->
-    <a href="{% url 'login' %}" class="map-link-button" id="button1">Login</a>
-    <a href="{% url 'register' %}" class="map-link-button" id="button2">Registrati</a>
+    <a href="{% url 'login' %}" class="map-link-button">Login</a>
+    <a href="{% url 'register' %}" class="map-link-button">Registrati</a>
   {% endif %}
 </div>
 
-
-
-
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 <script>
 const map = L.map('map').setView([44.6471, 10.9252], 10);
 
@@ -182,14 +151,45 @@ fetch("{% static 'mappa/modena.geojson' %}")
     map.fitBounds(geoLayer.getBounds());
   });
 
+const iconBaseUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/';
+const icons = {
+  EVENTO: new L.Icon({
+    iconUrl: iconBaseUrl + 'marker-icon-yellow.png',
+    shadowUrl: iconBaseUrl + 'marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  }),
+  FESTA: new L.Icon({
+    iconUrl: iconBaseUrl + 'marker-icon-red.png',
+    shadowUrl: iconBaseUrl + 'marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  }),
+  ALTRO: new L.Icon({
+    iconUrl: iconBaseUrl + 'marker-icon-blue.png',
+    shadowUrl: iconBaseUrl + 'marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  }),
+  DEFAULT: new L.Icon.Default()
+};
+
 const eventi = [
   {% for evento in eventi %}
     {
+      id: {{ evento.id }},
       titolo: "{{ evento.titolo|escapejs }}",
       descrizione: "{{ evento.descrizione|escapejs }}",
       luogo: "{{ evento.luogo|escapejs }}",
       data: "{{ evento.data }}",
       ora: "{{ evento.ora }}",
+      tipo: "{{ evento.tipo }}",
       lat: {{ evento.latitudine }},
       lng: {{ evento.longitudine }},
       marker: null
@@ -197,11 +197,21 @@ const eventi = [
   {% endfor %}
 ];
 
-// crea i marker e li associa
 eventi.forEach(e => {
   if (e.lat && e.lng) {
-    e.marker = L.marker([e.lat, e.lng]).addTo(map)
-      .bindPopup(`<strong>${e.titolo}</strong><br>${e.data} ${e.ora}<br>${e.luogo}`);
+    const link = `{% if user.is_authenticated %}{% url 'dettaglio_evento' 0 %}{% else %}{% url 'login' %}{% endif %}`.replace('0', e.id);
+
+    const popupContent = `
+      <strong>${e.titolo}</strong><br>
+      ${e.data} ${e.ora}<br>
+      ${e.luogo}<br>
+      <a href="${link}" style="color:#007bff;text-decoration:underline;">Più informazioni…</a>
+    `;
+
+    const markerIcon = icons[e.tipo] || icons.DEFAULT;
+
+    e.marker = L.marker([e.lat, e.lng], { icon: markerIcon }).addTo(map)
+      .bindPopup(popupContent);
   }
 });
 
@@ -213,6 +223,8 @@ function searchEvento() {
   if (found && found.marker) {
     map.setView(found.marker.getLatLng(), 14);
     found.marker.openPopup();
+  } else {
+    alert('Nessun evento trovato con questo titolo.');
   }
 }
 
@@ -237,8 +249,5 @@ map.on('contextmenu', function(e) {
 {% endif %}
 </script>
 
-
-
 </body>
-
 </html>

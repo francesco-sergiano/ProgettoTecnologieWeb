@@ -91,11 +91,23 @@ button[type="submit"]:hover {
     background-color: #218838;
     transform: translateY(-2px);
 }
+
+.login-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
 </style>
 </head>
 <body>
 
-<!-- aggiungi questo div per lo sfondo sfocato -->
 <div class="background-blur"></div>
 
 <div class="registration-container">
@@ -105,6 +117,8 @@ button[type="submit"]:hover {
         {{ form.as_p }}
         <button type="submit">Registrati</button>
     </form>
+
+    <a href="{% url 'login' %}" class="login-link">Hai già un account? Accedi</a>
 </div>
 
 </body>

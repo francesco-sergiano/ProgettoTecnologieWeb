@@ -6,6 +6,9 @@ from django.shortcuts import render, get_object_or_404
 from .forms import RegisterForm
 from .models import Evento
 from .forms import EventoForm
+from django.utils import timezone
+from datetime import timedelta
+import re
 
 def mappa_modena(request):
     eventi = Evento.objects.all()
@@ -23,7 +26,9 @@ def register_view(request):
             return redirect('mappa_modena') # Reindirizza alla mappa dopo la registrazione
     else:
         form = RegisterForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', {'form': form,
+        'background': '/media/MoEventsCollage.png'
+    })
 
 def login_view(request):
     if request.method == 'POST':
@@ -36,7 +41,9 @@ def login_view(request):
         else:
             # Opzionale: Aggiungi un messaggio di errore per credenziali non valide
             return render(request, 'login.html', {'error_message': 'Credenziali non valide'})
-    return render(request, 'login.html')
+    return render(request, 'login.html', {
+        'background': '/media/MoEventsCollage.png'
+    })
 
 def logout_view(request):
     logout(request)
@@ -88,8 +95,9 @@ def lista_view(request):
     tipo = request.GET.get("tipo", "")
     data = request.GET.get("data", "")
 
-    # sanifica query
-    import re
+    oggi = timezone.now().date()
+    ieri = oggi - timedelta(days=1)
+
     query = request.GET.get("q", "").strip()
 
     if len(query) > 100:

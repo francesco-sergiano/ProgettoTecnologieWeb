@@ -6,11 +6,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     # Mappa come pagina di default (accessibile a tutti)
-    path('', views.mappa_modena, name='home'), # Cambiato da login_view a mappa_modena
+    path('', views.mappa_modena, name='home'),
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('mappa/', views.mappa_modena, name='mappa_modena'), # Può rimanere o essere eliminato se la home è sufficiente
+    path('mappa/', views.mappa_modena, name='mappa_modena'),
     path('lista/', views.lista_view, name='lista'),
     path('elimina/<int:evento_id>/', views.elimina_evento, name='elimina_evento'),
     path('modifica/<int:evento_id>/', views.modifica_evento, name='modifica_evento'),

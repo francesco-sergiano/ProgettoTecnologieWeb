@@ -14,6 +14,7 @@
     --light-grey-border: #dcdcdc;
     --shadow-light: rgba(0,0,0,0.08);
     --shadow-medium: rgba(0,0,0,0.15);
+    --button-grey: #6c757d; /* Added for consistency with previous styles */
 }
 
 body {
@@ -125,13 +126,21 @@ h1 {
     margin-bottom: 8px;
 }
 
-.back-link-button {
+/* Unified button style for back links */
+.back-link-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    margin-top: 30px;
+    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+}
+
+.back-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 14px 30px;
-    margin-top: 30px;
-    background-color: var(--medium-grey);
+    background-color: var(--button-grey); /* Using the added custom property */
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -142,7 +151,7 @@ h1 {
     min-width: 200px;
 }
 
-.back-link-button:hover {
+.back-button:hover {
     background-color: #5a6268;
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
@@ -153,13 +162,27 @@ h1 {
     text-align: center;
 }
 
+.share-buttons p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--dark-blue);
+}
+
 .share-buttons a {
     margin: 5px;
     text-decoration: none;
     color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 10px 15px;
+    border-radius: 6px;
     display: inline-block;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.share-buttons a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .share-facebook { background: #3b5998; }
@@ -192,7 +215,11 @@ h1 {
     .event-info p.description {
         font-size: 0.95em;
     }
-    .back-link-button {
+    .back-link-container {
+        flex-direction: column; /* Stack buttons on small screens */
+        gap: 15px;
+    }
+    .back-button {
         width: 100%;
         min-width: unset;
         padding: 12px 20px;
@@ -238,7 +265,10 @@ h1 {
        class="share-email">Email</a>
 </div>
 
-<a href="{% url 'lista' %}" class="back-link-button">Torna alla lista</a>
+<div class="back-link-container">
+    <a href="{% url 'lista' %}" class="back-button">Torna alla lista</a>
+    <a href="{% url 'mappa_modena' %}" class="back-button">Torna alla Mappa</a>
+</div>
 
 </body>
 </html>

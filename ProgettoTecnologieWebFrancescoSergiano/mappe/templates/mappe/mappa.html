@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,6 +94,34 @@ font-size: 13px;
 color: #333;
 box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
+
+
+    .legend {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: sans-serif;
+  font-size: 13px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  line-height: 1.4;
+}
+
+.legend p {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend img {
+  width: 20px;
+  height: 34px;
+}
+
 </style>
 </head>
 <body>
@@ -117,6 +144,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <div class="map-buttons-container">
   {% if user.is_authenticated %}
     <a href="{% url 'lista' %}" class="map-link-button">Lista eventi</a>
+
+    {% if user.is_staff %}
+      <a href="{% url 'lista_utenti' %}" class="map-link-button">Lista utenti</a>
+    {% endif %}
+
     <form action="{% url 'logout' %}" method="post" style="display:inline;">
       {% csrf_token %}
       <button type="submit" class="map-button">Logout</button>
@@ -126,6 +158,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <a href="{% url 'register' %}" class="map-link-button">Registrati</a>
   {% endif %}
 </div>
+
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -248,6 +281,13 @@ map.on('contextmenu', function(e) {
 });
 {% endif %}
 </script>
+
+
+<div class="legend">
+  <p><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png" alt="Evento"> Evento</p>
+  <p><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" alt="Festa"> Festa</p>
+  <p><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png" alt="Altro"> Altro</p>
+</div>
 
 </body>
 </html>

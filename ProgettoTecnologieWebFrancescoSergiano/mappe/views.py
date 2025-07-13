@@ -1,6 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required # Importa questo
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404
 from .forms import RegisterForm
@@ -9,6 +8,8 @@ from .forms import EventoForm
 from django.utils import timezone
 from datetime import timedelta
 import re
+from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required
 
 def mappa_modena(request):
     eventi = Evento.objects.all()
@@ -42,7 +43,7 @@ def login_view(request):
             # Opzionale: Aggiungi un messaggio di errore per credenziali non valide
             return render(request, 'login.html', {'error_message': 'Credenziali non valide'})
     return render(request, 'login.html', {
-        'background': '/media/MoEventsCollage.png'
+        'background': '/media/MoEventsCollage.png', 'logo_url': '/media/MoEventsLogo.png'
     })
 
 def logout_view(request):
@@ -118,4 +119,31 @@ def lista_view(request):
         "tipo": tipo,
         "data": data,
     })
+
+@user_passes_test(lambda u: u.is_superuser)
+def lista_utenti(request):
+    if request.method == "POST":
+        action = request.POST.get("action")
+        user_id = request.POST.get("user_id")
+        user = get_object_or_404(User, pk=user_id)
+
+        if action == "make_staff":
+            user.is_staff = True
+            user.save()
+        elif action == "remove_staff":
+            user.is_staff = False
+            user.save()
+        elif action == "make_superuser":
+            user.is_superuser = True
+            user.save()
+        elif action == "remove_superuser":
+            user.is_superuser = False
+            user.save()
+        elif action == "delete":
+            user.delete()
+
+        return redirect("lista_utenti")
+
+    utenti = User.objects.all()
+    return render(request, "mappe/lista_utenti.html", {"utenti": utenti})
 

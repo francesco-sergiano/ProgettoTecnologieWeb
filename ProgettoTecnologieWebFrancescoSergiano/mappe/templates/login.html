@@ -38,6 +38,11 @@ body {
     max-width: 380px;
 }
 
+.login-logo {
+    max-width: 120px;
+    margin-bottom: 20px;
+}
+
 h2 {
     margin-bottom: 30px;
     color: #333;
@@ -112,6 +117,9 @@ button[type="submit"]:hover {
 <div class="background-blur"></div>
 
 <div class="login-container">
+    {% if logo_url %}
+      <img src="{{ logo_url }}" alt="Logo" class="login-logo">
+    {% endif %}
     <h2>Login</h2>
     <form method="post">
         {% csrf_token %}

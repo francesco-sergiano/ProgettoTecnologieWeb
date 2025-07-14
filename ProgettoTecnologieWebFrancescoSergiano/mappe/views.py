@@ -40,7 +40,6 @@ def login_view(request):
             login(request, user)
             return redirect('mappa_modena')
         else:
-            # Opzionale: Aggiungi un messaggio di errore per credenziali non valide
             return render(request, 'login.html', {'error_message': 'Credenziali non valide'})
     return render(request, 'login.html', {
         'background': '/media/MoEventsCollage.png', 'logo_url': '/media/MoEventsLogo.png'
@@ -50,7 +49,7 @@ def logout_view(request):
     logout(request)
     return redirect('mappa_modena')
 
-@login_required(login_url='/login/') # Aggiungi questo decoratore
+@login_required(login_url='/login/') 
 def lista_view(request):
     eventi = Evento.objects.all().order_by('data', 'ora')
     context = {
@@ -102,7 +101,7 @@ def lista_view(request):
     query = request.GET.get("q", "").strip()
 
     if len(query) > 100:
-        query = query[:100]  # evita input lunghissimi
+        query = query[:100]  
 
     if query:
         eventi = eventi.filter(titolo__icontains=query)

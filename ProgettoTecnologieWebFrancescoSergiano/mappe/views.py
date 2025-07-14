@@ -82,12 +82,12 @@ def modifica_evento(request, evento_id):
 
     return render(request, 'mappe/modifica_evento.html', {'form': form, 'evento': evento})
 
-
+@login_required
 def dettaglio_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
     return render(request, 'mappe/dettaglio_evento.html', {'evento': evento})
 
-
+@login_required
 def lista_view(request):
     eventi = Evento.objects.all()
 

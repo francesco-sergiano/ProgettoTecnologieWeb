@@ -6,7 +6,6 @@
     <title>Modifica Evento: {{ evento.titolo }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Variabili CSS per facilitare la gestione dei colori */
         :root {
             --primary-blue: #3498db;
             --dark-blue: #2c3e50;
@@ -18,27 +17,27 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif; /* Un font moderno e pulito */
+            font-family: 'Inter', sans-serif; 
             margin: 0;
             padding: 20px;
-            background-color: var(--light-grey); /* Sfondo chiaro e moderno */
+            background-color: var(--light-grey); 
             color: #333;
             line-height: 1.6;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centra il contenuto orizzontalmente */
-            min-height: 100vh; /* Assicura che il body occupi l'intera altezza della viewport */
+            align-items: center; 
+            min-height: 100vh; 
         }
 
         h1 {
-            color: var(--dark-blue); /* Colore più scuro e professionale */
+            color: var(--dark-blue);
             text-align: center;
             margin-bottom: 35px;
-            font-size: 2.8em; /* Titolo più grande e impattante */
-            font-weight: 700; /* Più spesso */
+            font-size: 2.8em; 
+            font-weight: 700; 
             letter-spacing: -0.8px;
             padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-blue); /* Sottolineatura sottile */
+            border-bottom: 2px solid var(--primary-blue); 
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
@@ -46,27 +45,27 @@
 
         .form-container {
             background-color: #ffffff;
-            border-radius: 12px; /* Bordi più arrotondati */
-            box-shadow: 0 8px 25px var(--shadow-light); /* Ombra più pronunciata e moderna */
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px var(--shadow-light); 
             padding: 40px;
-            max-width: 650px; /* Larghezza leggermente aumentata */
-            width: 100%; /* Si adatta alla larghezza disponibile */
-            margin-bottom: 30px; /* Spazio sotto il form */
-            border-top: 6px solid var(--primary-blue); /* Bordo superiore accentuato */
-            box-sizing: border-box; /* Include padding nel calcolo della larghezza */
+            max-width: 650px; 
+            width: 100%; 
+            margin-bottom: 30px; 
+            border-top: 6px solid var(--primary-blue); 
+            box-sizing: border-box; 
         }
 
-        /* Stili per i Campi del Form (generati da {{ form.as_p }}) */
+        
         .form-container p {
-            margin-bottom: 20px; /* Più spazio tra i campi */
+            margin-bottom: 20px; 
         }
 
         .form-container label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #444; /* Colore più scuro per le etichette */
-            font-size: 1em; /* Dimensione leggermente più grande */
+            color: #444; 
+            font-size: 1em; 
         }
 
         .form-container input[type="text"],
@@ -75,11 +74,11 @@
         .form-container input[type="number"],
         .form-container textarea,
         .form-container select {
-            width: 100%; /* Larghezza piena */
-            padding: 14px; /* Più padding per una migliore cliccabilità/tappabilità */
-            border: 1px solid #dcdcdc; /* Bordo più chiaro */
-            border-radius: 8px; /* Bordi arrotondati per i campi */
-            font-size: 1.05em; /* Testo leggermente più grande */
+            width: 100%; 
+            padding: 14px;
+            border: 1px solid #dcdcdc; 
+            border-radius: 8px;
+            font-size: 1.05em; 
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
             box-sizing: border-box;
             margin-top: 5px;
@@ -87,8 +86,8 @@
 
         .form-container input[type="file"] {
             width: 100%;
-            padding: 10px 0; /* Meno padding per l'input file, che ha già uno stile nativo */
-            border: none; /* Rimuovi bordo nativo */
+            padding: 10px 0; 
+            border: none; 
             font-size: 1em;
             box-sizing: border-box;
             margin-top: 5px;
@@ -102,34 +101,34 @@
         .form-container textarea:focus,
         .form-container select:focus {
             border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25); /* Anello di focus più moderno */
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25); 
             outline: none;
         }
 
         .form-container textarea {
             resize: vertical;
-            min-height: 120px; /* Altezza minima maggiore per la descrizione */
+            min-height: 120px; 
         }
 
-        /* Stile specifico per il testo "Latitudine in gradi decimali" e "Longitudine in gradi decimali" */
+
         .form-container p strong {
-            display: block; /* Forse le coordinate sono avvolte in un p con strong, assicuriamo che sia un blocco */
+            display: block; 
             margin-bottom: 5px;
             font-weight: 600;
             color: #555;
             font-size: 0.95em;
         }
 
-        /* Immagine Attuale */
+
         .current-image-section {
             margin-top: 30px;
             margin-bottom: 25px;
             text-align: center;
             padding: 20px;
-            background-color: #fcfcfc; /* Sfondo molto leggero */
+            background-color: #fcfcfc; 
             border-radius: 10px;
-            border: 1px solid #eee; /* Bordo sottile */
-            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05); /* Ombra interna leggera */
+            border: 1px solid #eee; 
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05); 
         }
 
         .current-image-section p {
@@ -141,52 +140,52 @@
         }
 
         .current-image-section img {
-            max-width: 300px; /* Dimensione maggiore per l'immagine */
+            max-width: 300px; 
             height: auto;
             border-radius: 8px;
-            box-shadow: 0 5px 15px var(--shadow-light); /* Ombra più visibile */
-            border: 2px solid #fff; /* Bordo bianco intorno all'immagine */
-            outline: 1px solid #ddd; /* Outline sottile */
+            box-shadow: 0 5px 15px var(--shadow-light); 
+            border: 2px solid #fff; 
+            outline: 1px solid #ddd; 
         }
 
-        /* Pulsanti */
+
         .button-group {
             display: flex;
-            justify-content: flex-end; /* Allinea i pulsanti a destra */
+            justify-content: flex-end; 
             margin-top: 35px;
-            gap: 20px; /* Spazio tra i pulsanti */
+            gap: 20px; 
         }
 
         .action-button {
             padding: 14px 30px;
             border: none;
-            border-radius: 8px; /* Bordi più arrotondati per i pulsanti */
+            border-radius: 8px; 
             cursor: pointer;
             font-size: 1.1em;
             font-weight: 600;
             transition: all 0.3s ease;
             text-align: center;
             text-decoration: none;
-            display: inline-flex; /* Usa flexbox per centrare il testo e l'icona se ci fossero */
+            display: inline-flex; 
             align-items: center;
             justify-content: center;
-            min-width: 150px; /* Larghezza minima per i pulsanti */
+            min-width: 150px; 
         }
 
         .save-button {
-            background-color: var(--primary-blue); /* Blu primario per Salva */
+            background-color: var(--primary-blue); 
             color: white;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); /* Ombra colorata */
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); 
         }
 
         .save-button:hover {
-            background-color: #2980b9; /* Blu leggermente più scuro all'hover */
-            transform: translateY(-3px); /* Effetto "alza" */
+            background-color: #2980b9; 
+            transform: translateY(-3px); 
             box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         }
 
         .back-button {
-            background-color: var(--medium-grey); /* Grigio per Indietro */
+            background-color: var(--medium-grey);
             color: white;
             box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
         }
@@ -197,7 +196,7 @@
             box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
         }
 
-        /* Media Queries per la Responsività */
+
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -232,13 +231,13 @@
                 max-width: 200px;
             }
             .button-group {
-                flex-direction: column; /* Impila i pulsanti su schermi piccoli */
+                flex-direction: column; 
                 gap: 15px;
-                justify-content: center; /* Centra i pulsanti impilati */
+                justify-content: center; 
             }
             .action-button {
-                width: 100%; /* Larghezza piena per i pulsanti */
-                min-width: unset; /* Rimuovi la larghezza minima */
+                width: 100%; 
+                min-width: unset; 
                 padding: 12px 20px;
                 font-size: 1em;
             }

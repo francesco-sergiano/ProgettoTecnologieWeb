@@ -267,12 +267,12 @@ map.on('contextmenu', function(e) {
   const lat = e.latlng.lat.toFixed(6);
   const lng = e.latlng.lng.toFixed(6);
 
-  const popupContent = `
-    <strong>Nuovo evento qui?</strong><br>
-    Lat: ${lat}<br>
-    Lng: ${lng}<br>
-    <a href="/admin/mappe/evento/add/?latitudine=${lat}&longitudine=${lng}" target="_blank">Crea nuovo evento</a>
-  `;
+const popupContent = `
+  <strong>Nuovo evento qui?</strong><br>
+  Lat: ${lat}<br>
+  Lng: ${lng}<br>
+  <a href="/nuovo_evento/?latitudine=${lat}&longitudine=${lng}" target="_blank">Crea nuovo evento</a>
+`;
 
   L.popup()
     .setLatLng(e.latlng)

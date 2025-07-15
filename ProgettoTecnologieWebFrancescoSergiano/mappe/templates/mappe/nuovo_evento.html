@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Nuovo Evento</title>
+<style>
+body {
+    font-family: sans-serif;
+    background: #f4f4f4;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover {
+    background: #0056b3;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Nuovo Evento</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crea Evento</button>
+    </form>
+    <p><a href="{% url 'mappa_modena' %}">Torna alla mappa</a></p>
+</div>
+</body>
+</html>

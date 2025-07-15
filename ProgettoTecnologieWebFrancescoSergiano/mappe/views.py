@@ -120,6 +120,7 @@ def lista_view(request):
     })
 
 @user_passes_test(lambda u: u.is_superuser)
+@login_required
 def lista_utenti(request):
     if request.method == "POST":
         action = request.POST.get("action")
@@ -146,3 +147,22 @@ def lista_utenti(request):
     utenti = User.objects.all()
     return render(request, "mappe/lista_utenti.html", {"utenti": utenti})
 
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def nuovo_evento(request):
+    lat = request.GET.get('latitudine')
+    lng = request.GET.get('longitudine')
+
+    if request.method == "POST":
+        form = EventoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("mappa_modena")
+    else:
+        form = EventoForm(initial={
+            'latitudine': lat,
+            'longitudine': lng
+        })
+
+    return render(request, "mappe/nuovo_evento.html", {"form": form})

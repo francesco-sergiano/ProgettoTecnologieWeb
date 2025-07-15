@@ -1,43 +1,218 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>Nuovo Evento</title>
-<style>
-body {
-    font-family: sans-serif;
-    background: #f4f4f4;
-    padding: 20px;
-}
-.container {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-}
-button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-button:hover {
-    background: #0056b3;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea Nuovo Evento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        :root {
+            --primary-blue: #3498db;
+            --dark-blue: #2c3e50;
+            --light-grey-bg: #eef2f7;
+            --medium-grey: #6c757d;
+            --green-success: #28a745; /* Usiamo questo per il bottone di creazione */
+            --shadow-light: rgba(0,0,0,0.08);
+            --shadow-medium: rgba(0,0,0,0.15);
+            --light-grey-border: #dcdcdc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-grey-bg);
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-blue);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-light);
+            padding: 40px;
+            max-width: 650px;
+            width: 100%;
+            margin-bottom: 30px;
+            border-top: 6px solid var(--primary-blue);
+            box-sizing: border-box;
+        }
+
+
+        .form-container p {
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1em;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="date"],
+        .form-container input[type="time"],
+        .form-container input[type="number"],
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--light-grey-border);
+            border-radius: 8px;
+            font-size: 1.05em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        .form-container input[type="file"] {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            font-size: 1em;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        .form-container input[type="text"]:focus,
+        .form-container input[type="date"]:focus,
+        .form-container input[type="time"]:focus,
+        .form-container input[type="number"]:focus,
+        .form-container input[type="file"]:focus,
+        .form-container textarea:focus,
+        .form-container select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+            outline: none;
+        }
+
+        .form-container textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end; /* Allinea i pulsanti a destra */
+            margin-top: 35px;
+            gap: 20px; /* Spazio tra i pulsanti */
+        }
+
+        .action-button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+        }
+
+        .create-button {
+            background-color: var(--green-success); /* Verde per "Crea Evento" */
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .create-button:hover {
+            background-color: #218838; /* Verde più scuro all'hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .back-button {
+            background-color: var(--medium-grey);
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+        }
+
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+                margin-bottom: 25px;
+                padding-bottom: 8px;
+            }
+            .form-container {
+                padding: 25px;
+                border-radius: 8px;
+            }
+            .form-container label {
+                font-size: 0.9em;
+            }
+            .form-container input[type="text"],
+            .form-container input[type="date"],
+            .form-container input[type="time"],
+            .form-container input[type="number"],
+            .form-container textarea,
+            .form-container select {
+                padding: 12px;
+                font-size: 0.95em;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 15px;
+                justify-content: center;
+            }
+            .action-button {
+                width: 100%;
+                min-width: unset;
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Nuovo Evento</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Crea Evento</button>
-    </form>
-    <p><a href="{% url 'mappa_modena' %}">Torna alla mappa</a></p>
-</div>
+    <h1>Crea Nuovo Evento</h1>
+
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="button-group">
+                <button type="submit" class="action-button create-button">Crea Evento</button>
+                <a href="{% url 'mappa_modena' %}" class="action-button back-button">Torna alla mappa</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

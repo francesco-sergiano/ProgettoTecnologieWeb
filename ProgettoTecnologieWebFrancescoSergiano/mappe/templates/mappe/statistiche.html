@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard delle Statistiche</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        :root {
+            --primary-blue: #3498db;
+            --dark-blue: #2c3e50;
+            --light-grey-bg: #eef2f7;
+            --medium-grey-text: #666;
+            --card-bg: #ffffff;
+            --border-light: #dcdcdc;
+            --shadow-light: rgba(0,0,0,0.08);
+            --shadow-medium: rgba(0,0,0,0.15);
+            --success-green: #28a745;
+            --info-blue: #17a2b8;
+            --warning-orange: #ffc107;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-grey-bg);
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-blue);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 {
+            color: var(--primary-blue);
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-light);
+            padding: 30px;
+            border-top: 6px solid var(--primary-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card h3 {
+            color: var(--dark-blue);
+            font-size: 1.5em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+
+        .table-card table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-card th, .table-card td {
+            border: 1px solid var(--border-light);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 1em;
+            color: #444;
+        }
+
+        .table-card th {
+            background-color: #f8f9fa;
+            color: var(--dark-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+
+        .table-card tr:nth-child(even) {
+            background-color: #fcfcfc; /* Riga alternata per leggibilità */
+        }
+
+
+        .visits-card ul {
+            list-style: none; /* Rimuove i bullet point */
+            padding: 0;
+            width: 100%;
+        }
+
+        .visits-card li {
+            background-color: #f8f9fa; /* Sfondo leggero per ogni voce */
+            margin-bottom: 10px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1em;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .visits-card li:last-child {
+            margin-bottom: 0;
+        }
+
+        .visits-card li strong {
+            color: var(--primary-blue); /* Colore primario per i numeri */
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+
+        .back-to-map-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 30px;
+            background-color: var(--medium-grey);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
+            min-width: 200px;
+            margin-top: 30px; /* Spazio sopra il pulsante */
+        }
+
+        .back-to-map-button:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+        }
+
+
+        .card.event-type-stats {
+            border-top-color: var(--info-blue);
+        }
+        .card.map-visits-stats {
+            border-top-color: var(--success-green);
+        }
+
+
+        .visits-card li strong {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+            h2 {
+                font-size: 1.5em;
+                margin-top: 20px;
+                margin-bottom: 15px;
+            }
+            .card {
+                padding: 20px;
+                border-radius: 8px;
+            }
+            .card h3 {
+                font-size: 1.3em;
+                margin-bottom: 15px;
+            }
+            .table-card th, .table-card td {
+                padding: 10px 12px;
+                font-size: 0.9em;
+            }
+            .visits-card li {
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+            .visits-card li strong {
+                font-size: 1.1em;
+            }
+            .back-to-map-button {
+                width: 100%;
+                min-width: unset;
+                padding: 12px 20px;
+                font-size: 1em;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dashboard delle Statistiche</h1>
+
+    <div class="dashboard-container">
+        <div class="card event-type-stats">
+            <h3>Percentuale Eventi per Tipo</h3>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr><th>Tipo</th><th>Percentuale</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for tipo, perc in stats_eventi.items %}
+                        <tr><td>{{ tipo }}</td><td><strong>{{ perc }}%</strong></td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card map-visits-stats">
+            <h3>Visite alla Mappa</h3>
+            <div class="visits-card">
+                <ul>
+                    <li>Ultimo giorno: <strong>{{ visite_oggi }}</strong></li>
+                    <li>Ultimo mese: <strong>{{ visite_mese }}</strong></li>
+                    <li>Ultimo anno: <strong>{{ visite_anno }}</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <a href="{% url 'mappa_modena' %}" class="back-to-map-button">⬅ Torna alla mappa</a>
+
+</body>
+</html>

@@ -17,4 +17,5 @@ urlpatterns = [
     path('evento/<int:evento_id>/', views.dettaglio_evento, name='dettaglio_evento'),
     path("nuovo_evento/", views.nuovo_evento, name="nuovo_evento"),
     path('utenti/', views.lista_utenti, name='lista_utenti'),
+    path('statistiche/', views.statistiche, name='statistiche'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

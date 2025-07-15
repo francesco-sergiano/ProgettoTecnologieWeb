@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -23,3 +24,10 @@ class Evento(models.Model):
     def __str__(self):
         return f"{self.titolo} ({self.tipo}) - {self.data}"
 
+
+class Visita(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Visita di {self.user} alle {self.timestamp}"

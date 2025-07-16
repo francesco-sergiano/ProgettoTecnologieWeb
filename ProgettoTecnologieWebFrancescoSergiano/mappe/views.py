@@ -17,7 +17,7 @@ def mappa_modena(request):
         Visita.objects.create(user=request.user)
     else:
         Visita.objects.create()
-    context = {'eventi': eventi}
+    context = {'eventi': eventi, 'logo_url': '/media/MoEventsLogo.png'}
     return render(request, 'mappe/mappa.html', context)
 
 
@@ -57,7 +57,7 @@ def logout_view(request):
     return redirect('mappa_modena')
 
 
-@login_required(login_url='/login/')
+
 def lista_view(request):
     eventi = Evento.objects.all()
 
@@ -110,7 +110,7 @@ def modifica_evento(request, evento_id):
     return render(request, 'mappe/modifica_evento.html', {'form': form, 'evento': evento})
 
 
-@login_required
+
 def dettaglio_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
     return render(request, 'mappe/dettaglio_evento.html', {'evento': evento})

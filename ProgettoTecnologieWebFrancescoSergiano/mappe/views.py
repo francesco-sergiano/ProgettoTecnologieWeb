@@ -14,13 +14,18 @@ from django.urls import reverse
 
 def mappa_modena(request):
     eventi = Evento.objects.all()
-
     if request.user.is_authenticated:
         Visita.objects.create(user=request.user)
     else:
         Visita.objects.create()
-    context = {'eventi': eventi, 'logo_url': '/media/MoEventsLogo.png'}
+
+    context = {
+        'eventi': eventi,
+        'logo_url': '/media/MoEventsLogo.png',
+        'creazione': request.GET.get('creazione') == '1'
+    }
     return render(request, 'mappe/mappa.html', context)
+
 
 
 def register_view(request):

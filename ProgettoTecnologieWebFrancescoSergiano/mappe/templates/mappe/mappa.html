@@ -398,18 +398,20 @@ function searchEvento() {
   }
 }
 
-{% if user.is_staff %}
-
+{% if user.is_staff or creazione %}
+  {% if creazione %}
+    alert("Modalità creazione evento: clicca col tasto destro sulla mappa per scegliere la posizione. Una volta cliccato conferma o meno la scelta!");
+  {% endif %}
 map.on('contextmenu', function(e) {
   const lat = e.latlng.lat.toFixed(6);
   const lng = e.latlng.lng.toFixed(6);
 
-const popupContent = `
-  <strong>Nuovo evento qui?</strong><br>
-  Lat: ${lat}<br>
-  Lng: ${lng}<br>
-  <a href="/nuovo_evento/?latitudine=${lat}&longitudine=${lng}" target="_blank">Crea nuovo evento</a>
-`;
+  const popupContent = `
+    <strong>Nuovo evento qui?</strong><br>
+    Lat: ${lat}<br>
+    Lng: ${lng}<br>
+    <a href="{% url 'nuovo_evento' %}?latitudine=${lat}&longitudine=${lng}">Crea nuovo evento</a>
+  `;
 
   L.popup()
     .setLatLng(e.latlng)
@@ -417,6 +419,7 @@ const popupContent = `
     .openOn(map);
 });
 {% endif %}
+
 </script>
 
 

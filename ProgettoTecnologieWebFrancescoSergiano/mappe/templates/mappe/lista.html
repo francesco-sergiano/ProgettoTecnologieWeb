@@ -190,7 +190,7 @@
 
     <div class="admin-button-container">
         {% if user.is_authenticated and user.is_superuser %}
-            <a href="{% url 'nuovo_evento' %}" class="admin-button">Crea nuovo evento</a>
+            <a href="{% url 'mappa_modena' %}?creazione=1" class="admin-button">Crea nuovo evento</a>
         {% endif %}
     </div>
 

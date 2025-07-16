@@ -39,7 +39,8 @@ def register_view(request):
         form = RegisterForm()
     return render(request, 'register.html', {
         'form': form,
-        'background': '/media/MoEventsCollage.png'
+        'background': '/media/MoEventsCollage.png',
+        'logo_url': '/media/MoEventsLogo.png'
     })
 
 

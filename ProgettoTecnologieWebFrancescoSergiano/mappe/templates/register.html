@@ -38,10 +38,15 @@ body {
     max-width: 320px; 
 }
 
+.registration-logo {
+    max-width: 120px;
+    margin-bottom: 15px;
+}
+
 h2 {
     margin-bottom: 20px;
     color: #333;
-    font-size: 24px; 
+    font-size: 24px;
     font-weight: normal;
 }
 
@@ -111,7 +116,11 @@ button[type="submit"]:hover {
 <div class="background-blur"></div>
 
 <div class="registration-container">
+    {% if logo_url %}
+      <img src="{{ logo_url }}" alt="Logo" class="registration-logo">
+    {% endif %}
     <h2>Registrazione</h2>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

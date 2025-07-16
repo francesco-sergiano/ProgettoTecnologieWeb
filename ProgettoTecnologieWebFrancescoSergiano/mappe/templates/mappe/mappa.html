@@ -171,44 +171,130 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 
+
+.map-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px; /* più alto */
+  background: rgba(255, 255, 255, 0.95);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  z-index: 1000;
+  font-family: sans-serif;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 0 20px;
+}
+
+.header-left {
+  justify-self: start;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  justify-self: center;
+}
+
+.header-right {
+  justify-self: end;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.map-search {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.map-search input {
+  border: none;
+  padding: 6px 10px;
+  outline: none;
+  width: 250px;
+}
+
+.map-search button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.map-search button:hover {
+  background-color: #0056b3;
+}
+
+.map-link-button, .map-button {
+  padding: 6px 10px;
+  font-size: 12px;
+  text-decoration: none;
+  color: white;
+  background-color: #007bff;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.map-link-button:hover, .map-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
 </style>
 </head>
 <body>
 
 <div id="map"></div>
 
-<div class="map-search-container">
-    <input type="text" id="search" placeholder="Cerca evento..." onkeyup="if(event.key === 'Enter') searchEvento()">
-    <button onclick="searchEvento()"><i class="fas fa-search"></i></button>
-</div>
-
-<div class="user-status-container">
+<header class="map-header">
+  <div class="header-left">
     {% if user.is_authenticated %}
-      👤 Connesso come <strong>{{ user.username }}</strong>
+      👤 {{ user.username }}
     {% else %}
-      🚫 Non sei connesso
+      🚫 Ospite
     {% endif %}
-</div>
+  </div>
 
-<div class="map-buttons-container">
-  <a href="{% url 'lista' %}" class="map-link-button">Lista eventi</a>
-  {% if user.is_authenticated %}
+  <div class="header-center">
+    <div class="map-search">
+      <input type="text" id="search" placeholder="Cerca evento…" onkeyup="if(event.key === 'Enter') searchEvento()">
+      <button onclick="searchEvento()"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
 
+  <div class="header-right">
+    <a href="{% url 'lista' %}" class="map-link-button">Lista eventi</a>
 
-    {% if user.is_staff %}
-      <a href="{% url 'lista_utenti' %}" class="map-link-button">Lista utenti</a>
-      <a href="{% url 'statistiche' %}" class="map-link-button">Statistiche</a>
+    {% if user.is_authenticated %}
+      {% if user.is_staff %}
+        <a href="{% url 'lista_utenti' %}" class="map-link-button">Lista utenti</a>
+        <a href="{% url 'statistiche' %}" class="map-link-button">Statistiche</a>
+      {% endif %}
+      <form action="{% url 'logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="map-button">Logout</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}" class="map-link-button">Login</a>
+      <a href="{% url 'register' %}" class="map-link-button">Registrati</a>
     {% endif %}
+  </div>
+</header>
 
-    <form action="{% url 'logout' %}" method="post" style="display:inline;">
-      {% csrf_token %}
-      <button type="submit" class="map-button">Logout</button>
-    </form>
-  {% else %}
-    <a href="{% url 'login' %}" class="map-link-button">Login</a>
-    <a href="{% url 'register' %}" class="map-link-button">Registrati</a>
-  {% endif %}
-</div>
 
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

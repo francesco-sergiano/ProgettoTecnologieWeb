@@ -79,7 +79,7 @@ def lista_view(request):
 
     salvati = request.GET.get("salvati", "")
 
-    
+
 
     if request.user.is_authenticated:
         salvati_ids = set(EventoSalvato.objects.filter(user=request.user).values_list('evento_id', flat=True))

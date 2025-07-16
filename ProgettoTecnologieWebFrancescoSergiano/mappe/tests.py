@@ -1,9 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from .models import Evento
 from datetime import datetime
-from mappe.models import Evento
+from models import Evento
 from datetime import date, time
 
 class ViewsTests(TestCase):

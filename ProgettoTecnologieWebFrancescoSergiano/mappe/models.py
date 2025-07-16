@@ -31,3 +31,11 @@ class Visita(models.Model):
 
     def __str__(self):
         return f"Visita di {self.user} alle {self.timestamp}"
+
+class EventoSalvato(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    evento = models.ForeignKey('Evento', on_delete=models.CASCADE)
+    salvato_il = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'evento')

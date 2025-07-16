@@ -7,7 +7,9 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Count
 from .forms import RegisterForm, EventoForm
-from .models import Evento, Visita
+from .models import Evento, Visita, EventoSalvato
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def mappa_modena(request):
@@ -64,9 +66,7 @@ def lista_view(request):
     query = request.GET.get("q", "").strip()
     tipo = request.GET.get("tipo", "")
     data = request.GET.get("data", "")
-
-    if len(query) > 100:
-        query = query[:100]
+    salvati = request.GET.get("salvati", "")
 
     if query:
         eventi = eventi.filter(titolo__icontains=query)
@@ -77,11 +77,27 @@ def lista_view(request):
     if data:
         eventi = eventi.filter(data=data)
 
+    salvati = request.GET.get("salvati", "")
+
+    
+
+    if request.user.is_authenticated:
+        salvati_ids = set(EventoSalvato.objects.filter(user=request.user).values_list('evento_id', flat=True))
+    else:
+        salvati_ids = set()
+
+    if salvati == "1":  # Solo salvati
+        eventi = eventi.filter(id__in=salvati_ids)
+    elif salvati == "0":  # Non salvati
+        eventi = eventi.exclude(id__in=salvati_ids)
+
     return render(request, "mappe/lista.html", {
         "eventi": eventi,
         "query": query,
         "tipo": tipo,
         "data": data,
+        "salvati": salvati,
+        "salvati_ids": list(salvati_ids),
     })
 
 
@@ -192,3 +208,16 @@ def statistiche(request):
     }
 
     return render(request, 'mappe/statistiche.html', context)
+
+
+@login_required
+def salva_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+    EventoSalvato.objects.get_or_create(user=request.user, evento=evento)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('lista')))
+
+@login_required
+def rimuovi_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+    EventoSalvato.objects.filter(user=request.user, evento=evento).delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('lista')))

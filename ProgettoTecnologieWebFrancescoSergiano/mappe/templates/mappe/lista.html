@@ -127,6 +127,14 @@
 
     <input type="date" name="data" value="{{ data }}" style="flex:1;min-width:150px;padding:5px;">
 
+    {% if user.is_authenticated %}
+    <select name="salvati" style="flex:1;min-width:120px;padding:5px;">
+        <option value="">Tutti</option>
+        <option value="1" {% if salvati == '1' %}selected{% endif %}>Solo salvati</option>
+        <option value="0" {% if salvati == '0' %}selected{% endif %}>Non salvati</option>
+    </select>
+    {% endif %}
+
     <button type="submit" style="flex:0;background:#007bff;color:#fff;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Filtra</button>
 </form>
 
@@ -148,6 +156,20 @@
 
 <div class="delete-form">
     <a href="{% url 'dettaglio_evento' evento.id %}" class="edit-button" style="background-color:#28a745;">Visualizza</a>
+
+    {% if user.is_authenticated %}
+        {% if evento.id in salvati_ids %}
+            <form action="{% url 'rimuovi_evento' evento.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="edit-button" style="background-color:#6c757d;">Rimuovi dai salvati</button>
+            </form>
+        {% else %}
+            <form action="{% url 'salva_evento' evento.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="edit-button" style="background-color:#17a2b8;">Salva evento</button>
+            </form>
+        {% endif %}
+    {% endif %}
 
     {% if user.is_authenticated and user.is_staff %}
         <a href="{% url 'modifica_evento' evento.id %}" class="edit-button">Modifica</a>

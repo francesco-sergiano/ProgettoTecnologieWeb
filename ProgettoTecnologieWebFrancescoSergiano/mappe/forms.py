@@ -1,5 +1,6 @@
 from django import forms
 from .models import Evento
+from datetime import date
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -9,7 +10,13 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = '__all__'
+
+        def clean_data(self):
+            data = self.cleaned_data['data']
+            if data < date.today():
+                raise forms.ValidationError("La data non può essere nel passato.")
+            return data
 
 
 class EventoForm(forms.ModelForm):

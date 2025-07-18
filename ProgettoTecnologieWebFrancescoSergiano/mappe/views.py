@@ -10,6 +10,7 @@ from .forms import RegisterForm, EventoForm
 from .models import Evento, Visita, EventoSalvato
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from datetime import date
 
 
 def mappa_modena(request):
@@ -184,7 +185,10 @@ def nuovo_evento(request):
             'longitudine': lng
         })
 
-    return render(request, "mappe/nuovo_evento.html", {"form": form})
+    return render(request, "mappe/nuovo_evento.html", {
+        "form": form,
+        "today": date.today().isoformat()
+    })
 
 
 @staff_member_required

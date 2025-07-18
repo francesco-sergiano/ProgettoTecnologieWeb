@@ -206,7 +206,19 @@
     <div class="form-container">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form.non_field_errors }}
+
+  {% for field in form %}
+    <p>
+      <label>{{ field.label_tag }}</label>
+      {% if field.name == "data" %}
+        <input type="date" name="data" value="{{ field.value }}" min="{{ today }}">
+      {% else %}
+        {{ field }}
+      {% endif %}
+      {{ field.errors }}
+    </p>
+  {% endfor %}
 
             <div class="button-group">
                 <button type="submit" class="action-button create-button">Crea Evento</button>

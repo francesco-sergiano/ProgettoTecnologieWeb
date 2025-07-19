@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.validators import RegexValidator
 
 
 class Evento(models.Model):
@@ -20,6 +21,13 @@ class Evento(models.Model):
     longitudine = models.FloatField(default=0.0, help_text="Longitudine in gradi decimali")
 
     immagine = models.ImageField(upload_to='eventi/', null=True, blank=True, help_text="Immagine dell'evento")
+
+    prenotabile = models.BooleanField(default=False, help_text="L'evento è prenotabile?")
+    contatto = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Numero di telefono o email per la prenotazione"
+    )
 
     def __str__(self):
         return f"{self.titolo} ({self.tipo}) - {self.data}"

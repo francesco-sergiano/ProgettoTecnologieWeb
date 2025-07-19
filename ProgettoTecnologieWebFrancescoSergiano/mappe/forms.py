@@ -22,17 +22,7 @@ class RegisterForm(UserCreationForm):
 class EventoForm(forms.ModelForm):
     class Meta:
         model = Evento
-        fields = [
-            'titolo',
-            'descrizione',
-            'luogo',
-            'data',
-            'ora',
-            'tipo',
-            'latitudine',
-            'longitudine',
-            'immagine',
-        ]
+        fields = '__all__'
         widgets = {
             'data': forms.DateInput(attrs={'type': 'date'}),
             'ora': forms.TimeInput(attrs={'type': 'time'}),

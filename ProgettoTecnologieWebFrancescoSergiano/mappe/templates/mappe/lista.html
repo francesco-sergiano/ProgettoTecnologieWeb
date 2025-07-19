@@ -46,23 +46,67 @@
             margin-top: 10px;
             line-height: 1.4;
         }
-        .delete-form {
-            margin-top: 10px;
-            text-align: right;
+
+        /* Nuovo stile per il contenitore dei bottoni */
+        .button-group {
+            display: flex; /* Usa flexbox per allineare i bottoni */
+            justify-content: flex-end; /* Allinea a destra */
+            gap: 8px; /* Spazio tra i bottoni */
+            margin-top: 15px;
         }
-        .delete-button {
-            background-color: #dc3545;
+
+        .button-group .action-button { /* Classe generica per tutti i bottoni d'azione */
+            width: 40px; /* Larghezza fissa */
+            height: 40px; /* Altezza fissa */
+            display: flex; /* Usa flexbox per centrare l'icona */
+            align-items: center; /* Centra verticalmente */
+            justify-content: center; /* Centra orizzontalmente */
             color: white;
             border: none;
-            padding: 5px 10px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 1.1em; /* Dimensione dell'icona */
             transition: background-color 0.3s ease;
+            text-decoration: none; /* Rimuove la sottolineatura per i link */
+            padding: 0; /* Rimuove il padding predefinito */
         }
-        .delete-button:hover {
+
+        .button-group .action-button.view {
+            background-color: #28a745; /* Verde per Visualizza */
+        }
+        .button-group .action-button.view:hover {
+            background-color: #218838;
+        }
+
+        .button-group .action-button.save {
+            background-color: #17a2b8; /* Blu-verde per Salva */
+        }
+        .button-group .action-button.save:hover {
+            background-color: #138496;
+        }
+
+        .button-group .action-button.remove-saved {
+            background-color: #6c757d; /* Grigio per Rimuovi dai salvati */
+        }
+        .button-group .action-button.remove-saved:hover {
+            background-color: #5a6268;
+        }
+
+        .button-group .action-button.edit {
+            background-color: #ffc107; /* Giallo per Modifica */
+        }
+        .button-group .action-button.edit:hover {
+            background-color: #e0a800;
+        }
+
+        .button-group .action-button.delete {
+            background-color: #dc3545; /* Rosso per Elimina */
+        }
+        .button-group .action-button.delete:hover {
             background-color: #c82333;
         }
+
+
         .back-link, .admin-button-container {
             display: block;
             text-align: center;
@@ -84,35 +128,21 @@
             color: white;
         }
 
-        .edit-button {
-    background-color: #ffc107;
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-}
-.edit-button:hover {
-    background-color: #e0a800;
-}
-
-.event-image {
-    width: 100%;
-    height: 200px;           /* Fissa l’altezza */
-    object-fit: cover;       /* Riempie lo spazio tagliando se necessario */
-    border-radius: 5px;
-    margin-bottom: 10px;
-    display: block;
-}
-
-
+        .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+        }
     </style>
     <script>
     function confermaEliminazione() {
         return confirm("Sei sicuro di voler eliminare questo evento?");
     }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <h1>Prossimi Eventi nella Provincia di Modena</h1>
@@ -155,33 +185,41 @@
                     <img src="{{ evento.immagine.url }}" alt="Immagine di {{ evento.titolo }}" class="event-image">
                     {% endif %}
 
-<div class="delete-form">
-    <a href="{% url 'dettaglio_evento' evento.id %}" class="edit-button" style="background-color:#28a745;">Visualizza</a>
+<div class="button-group"> <a href="{% url 'dettaglio_evento' evento.id %}" class="action-button view" title="Visualizza">
+        <i class="fa-solid fa-eye"></i>
+    </a>
 
     {% if user.is_authenticated %}
         {% if evento.id in salvati_ids %}
             <form action="{% url 'rimuovi_evento' evento.id %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" class="edit-button" style="background-color:#6c757d;">Rimuovi dai salvati</button>
+                <button type="submit" class="action-button remove-saved" title="Rimuovi dai salvati">
+                    <i class="fa-solid fa-bookmark"></i>
+                </button>
             </form>
         {% else %}
             <form action="{% url 'salva_evento' evento.id %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" class="edit-button" style="background-color:#17a2b8;">Salva evento</button>
+                <button type="submit" class="action-button save" title="Salva evento">
+                    <i class="fa-regular fa-bookmark"></i>
+                </button>
             </form>
         {% endif %}
     {% endif %}
 
     {% if user.is_authenticated and user.is_staff %}
-        <a href="{% url 'modifica_evento' evento.id %}" class="edit-button">Modifica</a>
+        <a href="{% url 'modifica_evento' evento.id %}" class="action-button edit" title="Modifica">
+            <i class="fa-solid fa-pen"></i>
+        </a>
 
         <form style="display:inline;" action="{% url 'elimina_evento' evento.id %}" method="post" onsubmit="return confermaEliminazione();">
             {% csrf_token %}
-            <button type="submit" class="delete-button">Elimina</button>
+            <button type="submit" class="action-button delete" title="Elimina">
+                <i class="fa-solid fa-trash"></i>
+            </button>
         </form>
     {% endif %}
 </div>
-
                 </div>
             {% endfor %}
         {% else %}

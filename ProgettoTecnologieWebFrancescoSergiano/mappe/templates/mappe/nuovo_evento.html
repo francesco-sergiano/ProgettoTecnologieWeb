@@ -205,26 +205,47 @@
 
     <div class="form-container">
         <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
+{% csrf_token %}
+{{ form.non_field_errors }}
 
-  {% for field in form %}
-    <p>
-      <label>{{ field.label_tag }}</label>
-      {% if field.name == "data" %}
-        <input type="date" name="data" value="{{ field.value }}" min="{{ today }}">
-      {% else %}
-        {{ field }}
-      {% endif %}
-      {{ field.errors }}
-    </p>
-  {% endfor %}
+{% for field in form %}
+  <p>
+    <label>{{ field.label_tag }}</label>
 
-            <div class="button-group">
-                <button type="submit" class="action-button create-button">Crea Evento</button>
-                <a href="{% url 'mappa_modena' %}" class="action-button back-button">Torna alla mappa</a>
-            </div>
-        </form>
+    {% if field.name == "data" %}
+      <input type="date" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}" min="{{ today }}">
+    {% else %}
+      {{ field }}
+    {% endif %}
+
+    {{ field.errors }}
+  </p>
+{% endfor %}
+
+<div class="button-group">
+    <button type="submit" class="action-button create-button">Crea Evento</button>
+    <a href="{% url 'mappa_modena' %}" class="action-button back-button">Torna alla mappa</a>
+</div>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const prenotabile = document.querySelector('input[name="prenotabile"]');
+    const contattoWrapper = document.querySelector('input[name="contatto"]').parentElement;
+
+    function toggleContatto() {
+        if (prenotabile.checked) {
+            contattoWrapper.style.display = "";
+        } else {
+            contattoWrapper.style.display = "none";
+            document.querySelector('input[name="contatto"]').value = "";
+        }
+    }
+
+    prenotabile.addEventListener("change", toggleContatto);
+    toggleContatto(); // inizializza correttamente
+});
+</script>
     </div>
 </body>
 </html>

@@ -259,6 +259,12 @@ h1 {
         {% if evento.latitudine and evento.longitudine %}
             <p><strong>Coordinate:</strong> {{ evento.latitudine }}, {{ evento.longitudine }}</p>
         {% endif %}
+        {% if evento.prenotabile %}
+    <p style="background:#e7f5ff; padding:10px; border-radius:5px; border-left:3px solid #3498db;">
+    📞 <strong>Contatto per prenotazioni:</strong> {{ evento.contatto }}
+</p>
+
+        {% endif %}
         <p class="description"><strong>Descrizione:</strong> {{ evento.descrizione }}</p>
     </div>
 </div>

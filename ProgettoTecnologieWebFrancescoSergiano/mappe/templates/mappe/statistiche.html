@@ -265,6 +265,28 @@
                 </ul>
             </div>
         </div>
+
+<div class="card">
+    <h3>Eventi più e meno cliccati</h3>
+
+    <div style="text-align:left; width:100%;">
+        <p><strong>📈 Più cliccato:</strong><br>
+            {% if evento_piu_cliccato %}
+                {{ evento_piu_cliccato.titolo }} ({{ evento_piu_cliccato.visite_count }} visite)
+            {% else %}
+                Nessun dato disponibile
+            {% endif %}
+        </p>
+
+        <p><strong>📉 Meno cliccato:</strong><br>
+            {% if evento_meno_cliccato %}
+                {{ evento_meno_cliccato.titolo }} ({{ evento_meno_cliccato.visite_count }} visite)
+            {% else %}
+                Nessun dato disponibile
+            {% endif %}
+        </p>
+    </div>
+</div>
     </div>
 
     <a href="{% url 'mappa_modena' %}" class="back-to-map-button">⬅ Torna alla mappa</a>

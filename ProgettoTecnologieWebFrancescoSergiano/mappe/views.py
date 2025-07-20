@@ -13,6 +13,7 @@ from django.urls import reverse
 from datetime import date
 
 
+
 def mappa_modena(request):
     eventi = Evento.objects.all()
     if request.user.is_authenticated:
@@ -136,6 +137,13 @@ def modifica_evento(request, evento_id):
 
 def dettaglio_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
+
+    # 📈 Registra la visita
+    if request.user.is_authenticated:
+        Visita.objects.create(user=request.user, evento=evento)
+    else:
+        Visita.objects.create(evento=evento)
+
     return render(request, 'mappe/dettaglio_evento.html', {'evento': evento})
 
 
@@ -210,15 +218,22 @@ def statistiche(request):
     visite_mese = Visita.objects.filter(timestamp__gte=mese).count()
     visite_anno = Visita.objects.filter(timestamp__gte=anno).count()
 
+    # 👇 Eventi più e meno cliccati
+    eventi_visite = Evento.objects.annotate(visite_count=Count('visita')).order_by('-visite_count')
+
+    evento_piu_cliccato = eventi_visite.first()
+    evento_meno_cliccato = eventi_visite.last()
+
     context = {
         'stats_eventi': stats_eventi,
         'visite_oggi': visite_oggi,
         'visite_mese': visite_mese,
         'visite_anno': visite_anno,
+        'evento_piu_cliccato': evento_piu_cliccato,
+        'evento_meno_cliccato': evento_meno_cliccato,
     }
 
     return render(request, 'mappe/statistiche.html', context)
-
 
 @login_required
 def salva_evento(request, evento_id):

@@ -251,7 +251,46 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   background-color: #0056b3;
 }
 
+@media (max-width: 768px) {
+  .map-header {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    row-gap: 10px;
+    text-align: center;
+    padding: 20px 10px; /* ↑ aumenta il padding verticale */
+    min-height: 100px; /* se vuoi che abbia sempre almeno questa altezza */
+  }
+}
 
+
+  .header-left {
+    justify-self: center;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .header-center {
+    justify-self: center;
+  }
+
+  .header-right {
+    justify-self: center;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .map-link-button,
+  .map-button {
+    flex: 1 1 auto;
+    width: auto;
+  }
+}
 
 
 </style>

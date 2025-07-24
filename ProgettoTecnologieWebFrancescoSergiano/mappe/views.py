@@ -11,6 +11,7 @@ from .models import Evento, Visita, EventoSalvato
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from datetime import date
+from django.core.paginator import Paginator
 
 
 
@@ -85,10 +86,6 @@ def lista_view(request):
     if data:
         eventi = eventi.filter(data=data)
 
-    salvati = request.GET.get("salvati", "")
-
-
-
     if request.user.is_authenticated:
         salvati_ids = set(EventoSalvato.objects.filter(user=request.user).values_list('evento_id', flat=True))
     else:
@@ -99,15 +96,20 @@ def lista_view(request):
     elif salvati == "0":  # Non salvati
         eventi = eventi.exclude(id__in=salvati_ids)
 
+
+    paginator = Paginator(eventi, 6)  # 6 eventi per pagina
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "mappe/lista.html", {
-        "eventi": eventi,
+        "eventi": page_obj.object_list,
+        "page_obj": page_obj,
         "query": query,
         "tipo": tipo,
         "data": data,
         "salvati": salvati,
         "salvati_ids": list(salvati_ids),
     })
-
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)

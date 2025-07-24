@@ -16,9 +16,23 @@
         }
 .event-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* Forza 3 colonne */
   gap: 20px;
 }
+
+/* Layout adattivo per dispositivi più piccoli */
+@media (max-width: 1024px) {
+  .event-list {
+    grid-template-columns: repeat(2, 1fr); /* 2 eventi per riga su tablet */
+  }
+}
+
+@media (max-width: 600px) {
+  .event-list {
+    grid-template-columns: 1fr; /* 1 evento per riga su telefono */
+  }
+}
+
         .event-card {
             background-color: white;
             border-radius: 8px;
@@ -135,86 +149,19 @@
             display: block;
         }
 
-/* --- Media Query per Dispositivi Mobili (Max 768px) --- */
-@media (max-width: 768px) {
-    body {
-        margin: 10px !important;
-        font-size: 1.1rem !important;
-    }
-
-    h1 {
-        font-size: 2rem !important;
-        margin-bottom: 25px !important;
-    }
-
-@media (max-width: 768px) {
-  .event-list {
-    grid-template-columns: 1fr !important;
-  }
+    .pagination a {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
 }
 
-  .event-card {
-    width: 100% !important;
-    margin: 0 auto !important;
-  }
+.pagination a:hover {
+    background-color: #0056b3;
 }
 
-    .event-card h2 {
-        font-size: 1.6rem !important;
-    }
-
-    .event-card p {
-        font-size: 1.1rem !important;
-    }
-
-    .event-image {
-        height: 220px !important;
-    }
-
-    /* Filtri di ricerca */
-    form {
-        flex-direction: column !important;
-        gap: 12px !important;
-        padding: 0 10px !important;
-    }
-
-    form input[type="text"],
-    form input[type="date"],
-    form select,
-    form button {
-        width: 100% !important;
-        padding: 12px !important;
-        font-size: 1.1rem !important;
-    }
-
-    form button {
-        padding: 15px !important;
-    }
-
-    /* Bottoni di azione (Visualizza, Salva, Modifica, Elimina) */
-    .button-group {
-        justify-content: center !important;
-        gap: 10px !important;
-        margin-top: 20px !important;
-    }
-
-    .button-group .action-button {
-        width: 55px !important;
-        height: 55px !important;
-        font-size: 1.6em !important;
-    }
-
-    .back-link,
-    .admin-button-container {
-        font-size: 1.1rem !important;
-        margin-top: 30px !important;
-    }
-
-    .back-link a, .admin-button {
-        padding: 12px 20px !important;
-        font-size: 1.1rem !important;
-    }
-}
 
     </style>
     <script>
@@ -306,6 +253,26 @@
             <p style="grid-column: 1 / -1; text-align: center;">Nessun evento disponibile al momento.</p>
         {% endif %}
     </div>
+{% with request.GET.urlencode as querystring %}
+{% if page_obj.has_other_pages %}
+<div class="pagination" style="text-align:center; margin-top: 30px;">
+    {% if page_obj.has_previous %}
+        <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}" style="margin-right: 10px;">
+            &laquo; Precedente
+        </a>
+    {% endif %}
+
+    <span>Pagina {{ page_obj.number }} di {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}" style="margin-left: 10px;">
+            Successiva &raquo;
+        </a>
+    {% endif %}
+</div>
+{% endif %}
+{% endwith %}
+
 
     <div class="admin-button-container">
         {% if user.is_authenticated and user.is_superuser %}

@@ -259,9 +259,9 @@
             <h3>Visite alla Mappa</h3>
             <div class="visits-card">
                 <ul>
-                    <li>Ultimo giorno: <strong>{{ visite_oggi }}</strong></li>
-                    <li>Ultimo mese: <strong>{{ visite_mese }}</strong></li>
-                    <li>Ultimo anno: <strong>{{ visite_anno }}</strong></li>
+                    <li>Ultimo giorno: <span style="margin-left: 10px;"><strong>{{ visite_oggi }}</strong></li>
+                    <li>Ultimo mese: <span style="margin-left: 10px;"><strong>{{ visite_mese }}</strong></li>
+                    <li>Ultimo anno: <span style="margin-left: 10px;"><strong>{{ visite_anno }}</strong></li>
                 </ul>
             </div>
         </div>
@@ -270,7 +270,7 @@
     <h3>Eventi più e meno cliccati</h3>
 
     <div style="text-align:left; width:100%;">
-        <p><strong>📈 Più cliccato:</strong><br>
+        <p><strong>📈 Più cliccato: </strong><br>
             {% if evento_piu_cliccato %}
                 {{ evento_piu_cliccato.titolo }} ({{ evento_piu_cliccato.visite_count }} visite)
             {% else %}
@@ -278,7 +278,7 @@
             {% endif %}
         </p>
 
-        <p><strong>📉 Meno cliccato:</strong><br>
+        <p><strong>📉 Meno cliccato: </strong><br>
             {% if evento_meno_cliccato %}
                 {{ evento_meno_cliccato.titolo }} ({{ evento_meno_cliccato.visite_count }} visite)
             {% else %}
